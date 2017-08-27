@@ -1,13 +1,13 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="background-color:aqua">
-  <div class="row" style="margin:4px">
-      <h1 style="font-family:Verdana;">
-        No Hands
-      </h1>
+<div style="background-color:#393a35" class="container-fluid">
+  <h1 style="font-family:Verdana;color:azure">
+    No Hands
+  </h1>
+  <div class="col" style="margin:4px">
       <button class="header-button" (click)="_onPress()" md-button class="md-primary">Run</button>
       <button (click)="_onPress()" md-button class="md-primary">Open</button>
       <button (click)="_onPress()" md-button class="md-primary">Download</button>
-      <status-bar></status-bar>
+      <status-bar [message]="Okay"></status-bar>
   </div>
   <div>
     <text-editor></text-editor>
