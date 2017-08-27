@@ -1,0 +1,22 @@
+<div class="container-fluid" style="margin:4px">
+    <div class="row">
+        <div class="header-button"><button (click)="_onPress()" md-button class="md-primary">Run</button></div>
+        <div class="header-button"><button (click)="_onPress()" md-button class="md-primary">Open</button></div>
+        <div class="header-button"><button (click)="_onPress()" md-button class="md-primary">Download</button></div>
+    </div>
+    <h3 style="font-family:Verdana;color:azure">Console:</h3>
+</div>
+    <ace-editor
+        [options]="consoleOptions"
+        [(text)]="consoleOutput"
+        #editor1
+        style="margin-bottom:10px; height:10vh; width:100%;overflow: auto;"
+    ></ace-editor>
+    <ace-editor
+    mode="python"
+    [options]="options"
+    [(text)]="text"
+    #editor
+    style=" height:100vh; width:100%;overflow: auto;"
+    >
+    </ace-editor>

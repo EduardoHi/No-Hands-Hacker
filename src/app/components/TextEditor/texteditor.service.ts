@@ -24,9 +24,9 @@ export class TextEditorService {
             .map(this.extractData)
             .catch(this.handleError);
     }
-    public runFile(): Observable<HttpResponse> {
+    public runFile(): Observable<String> {
         return this.http.get(this.address+"executeCode?foldername=1234&scriptCount=3", this.options)
-            .map(this.extractData)
+            .map(res => res.text())
             .catch(this.handleError);
     }
 
@@ -43,7 +43,7 @@ export class TextEditorService {
     }
 
     extractData(res: Response) {
-        return res;//.json();
+        return ;
     }
     
     handleError(error: Response | any) {

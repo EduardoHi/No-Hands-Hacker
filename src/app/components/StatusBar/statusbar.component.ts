@@ -10,8 +10,8 @@ import { Component,Input } from '@angular/core';
 
 export class StatusBarComponent {
     @Input()
-    status: number = 0;
     message :string = "status";
+    status: number = 0;
 
     constructor(){
 

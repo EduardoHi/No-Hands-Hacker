@@ -12,29 +12,27 @@ import { StatusBarComponent } from '../StatusBar/statusbar.component';
 
 @Component({
     selector: 'text-editor',
-    template: `
-    <ace-editor
-    mode="python"
-    [options]="options"
-    [(text)]="text"
-    #editor
-    style=" height:100vh; width:100%;overflow: auto;"
-    >
-    </ace-editor>
-    <textarea [(ngModel)]="consoleOutput"></textarea>    
-    `,
+    templateUrl: './texteditor.component.html',
+    styles: [`
+    .header-button{
+        display: inline;
+        min-width: 90px;
+    }`],
     providers: [TextEditorService,SpeechRecognitionService],
 })
 export class TextEditorComponent implements AfterViewInit {
     @ViewChild('editor') editor;
+    @ViewChild('editor1') editor1;
     text:string = "";
     consoleOutput:string = "";
 
-    addEnter(){
-        let editor = this.editor.getEditor();
-        editor.setValue(editor.getValue() + '\n');
-    }
-
+    consoleOptions: any = {
+        enableBasicAutocompletion: false,
+        enableSnippets: false,
+        enableLiveAutocompletion: false,
+        readOnly: true,
+    };
+    
     options: any = {
         enableBasicAutocompletion: true,
         enableSnippets: true,
@@ -48,11 +46,13 @@ export class TextEditorComponent implements AfterViewInit {
     ngAfterViewInit() {
         this.activateSpeech();
         this.createFolder();
-        console.log(this);
-        console.log(this.editor);
         this.editor.setTheme("monokai");
         this.editor.getEditor().setValue("print 'Hello, World !'");
         
+        this.editor1.getEditor().renderer.setShowGutter(false);
+        this.editor1.getEditor().renderer.setShowPrintMargin(false);
+        this.editor1.getEditor().set(false);
+
         var that = this;
         this.editor.getEditor().commands.addCommand(
             {
@@ -104,34 +104,26 @@ export class TextEditorComponent implements AfterViewInit {
             // this.loading = false;
             if (result.success) {
                 console.log(result);
-                // this._originalData = result.body;
-                //this._originalData2 = _.filter(this._originalData, function (x) { return (!x.type.grouper && x.type.inventoriable) });
-            } else {
-                // this.addToast(result.message);
             }
-            //this.products = this._fixOriginalData.slice(0, 10);
         },
         error => console.log(error)
         );
     }
     
     runFile(){
-        console.log();
+        var that = this;
         this.teService.addFile(this.editor.text)
         .subscribe(
         (result) => {
-            console.log(result);
-            // this.loading = false;
             this.teService.runFile().subscribe(
                 (resp) => {
                     console.log(resp);
-                    this.consoleOutput = resp.body;
+                    that.editor1.getEditor().setValue(resp+'\n', 1);
                 },
                 (error) => {
                     console.log(error);
                 }
-            )
-            
+            )  
         },
         error => console.log(error)
         );
