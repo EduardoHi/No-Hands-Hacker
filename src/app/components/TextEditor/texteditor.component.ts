@@ -8,11 +8,13 @@ import 'ace-builds/src-min-noconflict/snippets/python';
 import 'ace-builds/src-min-noconflict/snippets/text';
 import { TextEditorService } from './texteditor.service';
 import { SpeechRecognitionService } from './speechrecognition.service';
+import { StatusBarComponent } from '../StatusBar/statusbar.component';
 
 @Component({
     selector: 'text-editor',
     template: `
     <button (click)="_onPress()" md-button class="md-primary">Run</button>
+    <status-bar></status-bar>
     <ace-editor
     mode="python"
     [options]="options"
@@ -27,8 +29,6 @@ import { SpeechRecognitionService } from './speechrecognition.service';
 export class TextEditorComponent implements AfterViewInit {
     @ViewChild('editor') editor;
     text:string = "";
-    doc: File;
-    speechData: string;
 
     options: any = {
         enableBasicAutocompletion: true,
@@ -58,16 +58,6 @@ export class TextEditorComponent implements AfterViewInit {
                 }
             }
         );
-        this.editor.getEditor().commands.addCommand(
-            {
-                name: "new Tab",
-                bindKey: "Alt-N",
-                exec: function (editor) {
-                    console.log(editor);
-                    // editor.setDocument( new Document())
-                }
-            },
-        )
     }
 
     _onPress(){
