@@ -2,6 +2,9 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.0.
 
+This application is a solution for people who have a certain physical limitation in their hands or fingers, but would like to program just like any other hacker. You might think that there are more than enough programming tools for everyone, but think about how you would make your current project or homework, if you could not type whatsoever.
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
