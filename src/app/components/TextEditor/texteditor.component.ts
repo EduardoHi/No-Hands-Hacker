@@ -8,6 +8,7 @@ import 'ace-builds/src-min-noconflict/snippets/python';
 import 'ace-builds/src-min-noconflict/snippets/text';
 import { TextEditorService } from './texteditor.service';
 import { SpeechRecognitionService } from './speechrecognition.service';
+import { StatusBarComponent } from '../StatusBar/statusbar.component';
 
 @Component({
     selector: 'text-editor',
@@ -26,8 +27,6 @@ import { SpeechRecognitionService } from './speechrecognition.service';
 export class TextEditorComponent implements AfterViewInit {
     @ViewChild('editor') editor;
     text:string = "";
-    doc: File;
-    speechData: string;
 
     addEnter(){
         let editor = this.editor.getEditor();
@@ -62,16 +61,6 @@ export class TextEditorComponent implements AfterViewInit {
                 }
             }
         );
-        this.editor.getEditor().commands.addCommand(
-            {
-                name: "new Tab",
-                bindKey: "Alt-N",
-                exec: function (editor) {
-                    console.log(editor);
-                    // editor.setDocument( new Document())
-                }
-            },
-        )
     }
 
     _onPress(){
