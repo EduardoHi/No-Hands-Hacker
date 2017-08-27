@@ -29,6 +29,7 @@ export class TextEditorComponent implements AfterViewInit {
     text:string = "";
     doc: File;
     speechData: string;
+
     options: any = {
         enableBasicAutocompletion: true,
         enableSnippets: true,
@@ -40,6 +41,7 @@ export class TextEditorComponent implements AfterViewInit {
      }
 
     ngAfterViewInit() {
+        this.activateSpeechSearchMovie();
         this.createFolder();
         console.log(this);
         console.log(this.editor);
@@ -69,17 +71,16 @@ export class TextEditorComponent implements AfterViewInit {
     }
 
     _onPress(){
-        this.activateSpeechSearchMovie();
     }
 
     activateSpeechSearchMovie(): void {
+        let editor = this.editor.getEditor();
 
         this.srService.record()
             .subscribe(
             //listener
             (value) => {
-                this.speechData = value;
-                console.log(value);
+                editor.setValue(editor.getValue()+value+'\n', 1);
             },
             //errror
             (err) => {
