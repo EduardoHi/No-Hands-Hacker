@@ -38,15 +38,15 @@ export class TextEditorComponent implements AfterViewInit {
 
     constructor(private teService: TextEditorService, private srService:     SpeechRecognitionService){
 
-     }
+    }
 
     ngAfterViewInit() {
-        this.activateSpeechSearchMovie();
-        this.createFolder();
-        console.log(this);
-        console.log(this.editor);
+        this.activateSpeech();
+        // this.createFolder();
         this.editor.setTheme("monokai");
         var that = this;
+
+        this.editor.getEditor().setValue("\nprint 'Hello, World !'");
 
         this.editor.getEditor().commands.addCommand(
             {
@@ -54,7 +54,7 @@ export class TextEditorComponent implements AfterViewInit {
                 bindKey: "Alt-R",
                 exec: function (editor) {
                     console.log("RUN");
-                    that.runFile();
+                    that.addAndRun();
                 }
             }
         );
@@ -73,7 +73,7 @@ export class TextEditorComponent implements AfterViewInit {
     _onPress(){
     }
 
-    activateSpeechSearchMovie(): void {
+    activateSpeech(): void {
         let editor = this.editor.getEditor();
 
         this.srService.record()
@@ -82,18 +82,18 @@ export class TextEditorComponent implements AfterViewInit {
             (value) => {
                 editor.setValue(editor.getValue()+value+'\n', 1);
             },
-            //errror
+            //error
             (err) => {
                 console.log(err);
                 if (err.error == "no-speech") {
                     console.log("--restatring service--");
-                    this.activateSpeechSearchMovie();
+                    this.activateSpeech();
                 }
             },
             //completion
             () => {
                 console.log("--complete--");
-                this.activateSpeechSearchMovie();
+                this.activateSpeech();
             });
     }
 
@@ -115,13 +115,14 @@ export class TextEditorComponent implements AfterViewInit {
         );
     }
     
-    runFile(){
-        this.teService.addFile(this.editor.getDocument())
+    addAndRun(){
+        this.teService.runFile()
         .subscribe(
         result => {
             // this.loading = false;
             if (result.success) {
                 console.log(result);
+                console.log(result.message)
                 // this._originalData = result.body;
                 //this._originalData2 = _.filter(this._originalData, function (x) { return (!x.type.grouper && x.type.inventoriable) });
             } else {
