@@ -31,7 +31,7 @@ Método POST:
 
 Método POST:
 
-/api/v1/endSession?foldername=XXXXX&scriptCount=#
+/api/v1/endSession?foldername=XXXXX
 
 
 Descripción de parámetros:
