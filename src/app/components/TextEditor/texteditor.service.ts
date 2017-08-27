@@ -15,13 +15,18 @@ export class TextEditorService {
     private options;
 
     constructor(private http: Http) {
-        this.headers = new Headers();//{ 'Authorization': 'Bearer ' + localStorage.getItem('token') });
+        // this.headers = new Headers();//{ 'Authorization': 'Bearer ' + localStorage.getItem('token') });
         // this.headers.append('UserName', localStorage.getItem('CurrentUser'));
         this.options = new RequestOptions({ headers: this.headers });
     }
 
-    public addFile(body: File): Observable<HttpResponse> {
-        return this.http.post(this.address, body, this.options)
+    public addFile(body: Document): Observable<HttpResponse> {
+        return this.http.post(this.address+"recieveScript?foldername=1234&scriptCount=3", body, this.options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+    public runFile(): Observable<HttpResponse> {
+        return this.http.get(this.address+"executeCode?foldername=1234&scriptCount=3", this.options)
             .map(this.extractData)
             .catch(this.handleError);
     }
@@ -39,7 +44,7 @@ export class TextEditorService {
     }
 
     extractData(res: Response) {
-        return res.json();
+        return res;//.json();
     }
     
     handleError(error: Response | any) {
