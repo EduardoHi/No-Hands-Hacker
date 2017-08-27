@@ -10,7 +10,7 @@ import { File } from '../../../models/File';
 @Injectable()
 
 export class TextEditorService {
-    private address = "http://a87dda11.ngrok.io/";
+    private address = "http://40414dcc.ngrok.io/api/v1/";
     private headers;
     private options;
 
@@ -22,6 +22,12 @@ export class TextEditorService {
 
     public addFile(body: File): Observable<HttpResponse> {
         return this.http.post(this.address, body, this.options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    public createFolder(): Observable<HttpResponse> {
+        return this.http.post(this.address+"createFolder?foldername=XXXXX", this.options)
             .map(this.extractData)
             .catch(this.handleError);
     }
