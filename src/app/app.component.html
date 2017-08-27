@@ -1,13 +1,15 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="background-color:#393a35" class="container-fluid">
+<div style="background-color:#393a35">
   <h1 style="font-family:Verdana;color:azure">
     No Hands
   </h1>
-  <div class="col" style="margin:4px">
-      <button class="header-button" (click)="_onPress()" md-button class="md-primary">Run</button>
-      <button (click)="_onPress()" md-button class="md-primary">Open</button>
-      <button (click)="_onPress()" md-button class="md-primary">Download</button>
-      <status-bar [message]="Okay"></status-bar>
+  <div class="container-fluid" style="margin:4px">
+    <div class="row">
+      <div class="header-button"><button (click)="_onPress()" md-button class="md-primary">Run</button></div>
+      <div class="header-button"><button (click)="_onPress()" md-button class="md-primary">Open</button></div>
+      <div class="header-button"><button (click)="_onPress()" md-button class="md-primary">Download</button></div>
+    </div>
+      <div class="header-button" style="width: 100px;font-family:Verdana"><status-bar></status-bar></div>
   </div>
   <div>
     <text-editor></text-editor>

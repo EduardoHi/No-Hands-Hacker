@@ -1,5 +1,5 @@
 
 .header-button{
-    color: blue;
-    border-radius: 15;
+    display: inline;
+    min-width: 90px;
 }

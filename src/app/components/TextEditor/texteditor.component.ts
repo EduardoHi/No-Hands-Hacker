@@ -21,12 +21,14 @@ import { StatusBarComponent } from '../StatusBar/statusbar.component';
     style=" height:100vh; width:100%;overflow: auto;"
     >
     </ace-editor>
+    <textarea [(ngModel)]="consoleOutput"></textarea>    
     `,
     providers: [TextEditorService,SpeechRecognitionService],
 })
 export class TextEditorComponent implements AfterViewInit {
     @ViewChild('editor') editor;
     text:string = "";
+    consoleOutput:string = "";
 
     addEnter(){
         let editor = this.editor.getEditor();
@@ -49,8 +51,9 @@ export class TextEditorComponent implements AfterViewInit {
         console.log(this);
         console.log(this.editor);
         this.editor.setTheme("monokai");
+        this.editor.getEditor().setValue("print 'Hello, World !'");
+        
         var that = this;
-
         this.editor.getEditor().commands.addCommand(
             {
                 name: "runProgram",
@@ -113,18 +116,22 @@ export class TextEditorComponent implements AfterViewInit {
     }
     
     runFile(){
-        this.teService.addFile(this.editor.getDocument())
+        console.log();
+        this.teService.addFile(this.editor.text)
         .subscribe(
-        result => {
+        (result) => {
+            console.log(result);
             // this.loading = false;
-            if (result.success) {
-                console.log(result);
-                // this._originalData = result.body;
-                //this._originalData2 = _.filter(this._originalData, function (x) { return (!x.type.grouper && x.type.inventoriable) });
-            } else {
-                // this.addToast(result.message);
-            }
-            //this.products = this._fixOriginalData.slice(0, 10);
+            this.teService.runFile().subscribe(
+                (resp) => {
+                    console.log(resp);
+                    this.consoleOutput = resp.body;
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
+            
         },
         error => console.log(error)
         );

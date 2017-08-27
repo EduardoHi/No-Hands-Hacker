@@ -5,12 +5,11 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Observable } from "rxjs/Observable";
 import { HttpResponse } from '../../../models/HttpResponse';
-import { File } from '../../../models/File';
 
 @Injectable()
 
 export class TextEditorService {
-    private address = "http://40414dcc.ngrok.io/api/v1/";
+    private address = "http://8f115e04.ngrok.io/api/v1/";
     private headers;
     private options;
 
@@ -21,7 +20,7 @@ export class TextEditorService {
     }
 
     public addFile(body: Document): Observable<HttpResponse> {
-        return this.http.post(this.address+"recieveScript?foldername=1234&scriptCount=3", body, this.options)
+        return this.http.post(this.address+"receiveScript?foldername=1234&scriptCount=3", body, this.options)
             .map(this.extractData)
             .catch(this.handleError);
     }
