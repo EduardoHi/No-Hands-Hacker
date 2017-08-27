@@ -12,7 +12,6 @@ import { SpeechRecognitionService } from './speechrecognition.service';
 @Component({
     selector: 'text-editor',
     template: `
-    <button (click)="_onPress()" md-button class="md-primary">Run</button>
     <ace-editor
     mode="python"
     [options]="options"
@@ -30,6 +29,11 @@ export class TextEditorComponent implements AfterViewInit {
     doc: File;
     speechData: string;
 
+    addEnter(){
+        let editor = this.editor.getEditor();
+        editor.setValue(editor.getValue() + '\n');
+    }
+
     options: any = {
         enableBasicAutocompletion: true,
         enableSnippets: true,
@@ -38,15 +42,15 @@ export class TextEditorComponent implements AfterViewInit {
 
     constructor(private teService: TextEditorService, private srService:     SpeechRecognitionService){
 
-    }
+     }
 
     ngAfterViewInit() {
         this.activateSpeech();
-        // this.createFolder();
+        this.createFolder();
+        console.log(this);
+        console.log(this.editor);
         this.editor.setTheme("monokai");
         var that = this;
-
-        this.editor.getEditor().setValue("\nprint 'Hello, World !'");
 
         this.editor.getEditor().commands.addCommand(
             {
@@ -54,7 +58,7 @@ export class TextEditorComponent implements AfterViewInit {
                 bindKey: "Alt-R",
                 exec: function (editor) {
                     console.log("RUN");
-                    that.addAndRun();
+                    that.runFile();
                 }
             }
         );
@@ -71,22 +75,26 @@ export class TextEditorComponent implements AfterViewInit {
     }
 
     _onPress(){
+        () => {}
     }
+
+    
 
     activateSpeech(): void {
         let editor = this.editor.getEditor();
-
+        var that = this;
         this.srService.record()
             .subscribe(
             //listener
             (value) => {
-                editor.setValue(editor.getValue()+value+'\n', 1);
+                editor.setValue(editor.getValue()+value.message+' ', 1);
+                
             },
-            //error
+            //errror
             (err) => {
                 console.log(err);
                 if (err.error == "no-speech") {
-                    console.log("--restatring service--");
+                    console.log("--restarting service--");
                     this.activateSpeech();
                 }
             },
@@ -115,14 +123,13 @@ export class TextEditorComponent implements AfterViewInit {
         );
     }
     
-    addAndRun(){
-        this.teService.runFile()
+    runFile(){
+        this.teService.addFile(this.editor.getDocument())
         .subscribe(
         result => {
             // this.loading = false;
             if (result.success) {
                 console.log(result);
-                console.log(result.message)
                 // this._originalData = result.body;
                 //this._originalData2 = _.filter(this._originalData, function (x) { return (!x.type.grouper && x.type.inventoriable) });
             } else {

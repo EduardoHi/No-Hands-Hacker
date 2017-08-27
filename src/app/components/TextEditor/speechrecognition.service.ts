@@ -2,21 +2,43 @@ import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import * as _ from "lodash";
 
+
 interface IWindow extends Window {
     webkitSpeechRecognition: any;
     SpeechRecognition: any;
+}
 
+class speechResponse {
+    message: string;
+    status: number;
 }
 
 @Injectable()
 export class SpeechRecognitionService {
     speechRecognition: any;
     operatorsMap: Map<String, Object>;
+    commandsMap: Map <String, Object>
+    currentNumber: number;
 
     constructor(private zone: NgZone) {
         this.setSemanticsMap();
+        this.setCommandsMap();
     }
-    setSemanticsMap(){       
+    
+    setCommandsMap(){
+        this.commandsMap = new Map();
+        this.commandsMap.set("jump", "1");
+    }
+    checkCommands(transcript: string): boolean{
+        var splitted = transcript.split(" ");
+        var result = "", tmp: string;
+        tmp = <string>this.findOperator(this.commandsMap, splitted, 0);
+        if(tmp  != "")
+            this.currentNumber = +tmp;
+        return tmp != "";
+    }
+    setSemanticsMap(){    
+        this.currentNumber = 0;   
         this.operatorsMap = new Map<String, Object>();
         var tmp: Map<String, Object> = new Map<String, Object>();
         tmp.set("parenthesis", "(");
@@ -61,7 +83,8 @@ export class SpeechRecognitionService {
         this.operatorsMap.set("floor", tmp);
         this.operatorsMap.set("module", "% ");
         this.operatorsMap.set("modulus", "% ");
-        this.operatorsMap.set("modular", "% ");
+        this.operatorsMap.set("modulus", "% ");
+        this.operatorsMap.set("modulo", "% ");
         var subSubTmp : Map<String, Object>= new Map<String, Object>();
         subTmp = new Map<String, Object>();
         tmp = new Map<String, Object>();
@@ -77,8 +100,11 @@ export class SpeechRecognitionService {
 
         tmp = new Map();
         tmp.set("loop", "for");
+        tmp.set("Loop", "for");
         this.operatorsMap.set("four", tmp);
         this.operatorsMap.set("for", tmp);
+
+
 
         this.operatorsMap.set("equals", "== ");
         subSubTmp = new Map<String, Object>();
@@ -118,7 +144,7 @@ export class SpeechRecognitionService {
         console.log(this.operatorsMap.has("or"));
     }
 
-    record(): Observable<string> {
+    record(): Observable<speechResponse> {
 
         return Observable.create(observer => {
             const { webkitSpeechRecognition }: IWindow = <IWindow>window;
@@ -130,11 +156,12 @@ export class SpeechRecognitionService {
             this.speechRecognition.maxAlternatives = 1;
 
             this.speechRecognition.onresult = (speech) => {
-                let term: string = "";
+                var term = { message: " ", status: 0};
                 if (speech.results) {
                     var result = speech.results[speech.resultIndex];
                     var transcript = result[0].transcript;
                     console.log(transcript);
+                    this.checkCommands(transcript);
                     transcript = this.semantics(transcript);
                     console.log(transcript);
                     if (result.isFinal) {
@@ -142,8 +169,8 @@ export class SpeechRecognitionService {
                             console.log("Unrecognized result - Please try again");
                         }
                         else {
-                            term = _.trim(transcript);
-                            console.log("Did you said? -> " + term + " , If not then say something else...");
+                            term.message = transcript;
+                            term.status = this.currentNumber;
                         }
                     }
                 }
@@ -198,7 +225,7 @@ export class SpeechRecognitionService {
             if(tmp == "")
                 result += splitted[i] + " ";
             else{
-                result += tmp + " ";
+                result += tmp;
                 i += this.getAdvance(this.operatorsMap, splitted, i);
             }
         }
