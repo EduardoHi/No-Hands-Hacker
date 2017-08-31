@@ -13,5 +13,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ### Deploy to github pages
 Before, if `ngh` is not installed, run `npm install -g angular-cli-ghpages` to instal ngh globally.
+
 Run `ng build --aot=false --prod --base-href "https://EduardoHi.github.io/No-Hands-Hacker/"` to build the angular app and then run `ngh --message="<Your Message>"` the message is optional.
+
 after that, the page https://EduardoHi.github.io/No-Hands-Hacker/ should be serving the updated app.
