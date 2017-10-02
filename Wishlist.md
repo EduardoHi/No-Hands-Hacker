@@ -1,0 +1,13 @@
+- [ ] Status Bar
+    - [ ] Text Input status
+    - [ ] Connection status
+    - [ ] Server Status
+- [ ] Multiple Files
+    - [ ] Tree view of files
+    - [ ] Editor Tabs
+- [ ] Config Support
+    - [ ] Config Files
+        - [ ] theme files
+        - [ ] commands files
+        - [ ] semantics files
+        - [ ] snippets files
